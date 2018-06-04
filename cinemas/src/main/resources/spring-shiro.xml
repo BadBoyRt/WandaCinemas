@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/tx 
+			http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+			http://www.springframework.org/schema/aop 
+			http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	
+	
+	<!-- 配置进行授权和认证的 Realm -->
+	<bean id="cinemasShiroRealm" class="com.thtf.cinemas.utils.cinemasShiroRealm">
+	</bean>
+
+	<!-- 配置进行授权和认证的 Realm，这里主要是设置自定义的单Realm应用,若有多个Realm,可使用'realms'属性代替 -->
+	<!-- 配置 Shiro 的 SecurityManager Bean. -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!--会话生命周期单位秒 生命周期由SpringApplicationContext管理才启用 -->
+		<!-- <property name="globalSessionTimeout" value="1800000"/> -->
+		<property name="realm" ref="cinemasShiroRealm" />
+		<!-- <property name="sessionManager" ref="sessionManager"/> -->
+	</bean>
+	
+	<!-- 基于Form表单的身份验证过滤器 -->
+     <!-- <bean id="formAuthenticationFilter" class="com.techcon.in.tums.shiro.filter.TumsExtendFormAuthenticationFilter">
+        <property name="usernameParam" value="loginName"/>
+        <property name="passwordParam" value="password"/>
+        <property name="loginUrl" value="/jsp/user/login.jsp"/>
+    </bean>  -->
+	
+	<!-- 启用shrio授权注解拦截方式 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- Shiro的核心安全接口,这个属性是必须的 -->
+		<property name="securityManager" ref="securityManager" />
+		
+		 <property name="filters">
+                     <map>
+                      <entry key="authc" value-ref="formAuthenticationFilter"/>  
+                     </map>
+              </property> 
+        
+		<!-- 要求登录时的链接(可根据项目的URL进行替换),非必须的属性,默认会自动寻找Web工程根目录下的"/login.jsp"页面 -->
+		 <property name="loginUrl" value="/jsp/user/login.jsp" />
+		<!-- 登录成功后要跳转的连接(本例中此属性用不到,因为登录成功后的处理逻辑在LoginController里硬编码为main.jsp了) -->
+		<!-- <property name="successUrl" value="/system/main"/> -->
+		<!-- 用户访问未对其授权的资源时,所显示的连接 -->
+		<!-- 若想更明显的测试此属性可以修改它的值,如unauthor.jsp,然后用[玄玉]登录后访问/admin/listUser.jsp就看见浏览器会显示unauthor.jsp -->
+		<property name="unauthorizedUrl" value="/" />
+		
+		
+		
+		<!-- Shiro连接约束配置,即过滤链的定义 -->
+		<!-- anon：它对应的过滤器里面是空的,什么都没做,这里.do和.jsp后面的*表示参数,比方说login.jsp?main这种 -->
+		<!-- authc：该过滤器下的页面必须登陆认证后才能访问,它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter -->
+		<property name="filterChainDefinitions">
+			<value>
+				 /user/login=anon  
+				/alert/**=anon
+				/img/**=anon
+				/css/**=anon
+				/js/**=anon
+				/** =authc
+           </value>
+		</property>
+	</bean>
+	
+	<!-- Shiro 内部bean生命周期处理器 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+</beans>
