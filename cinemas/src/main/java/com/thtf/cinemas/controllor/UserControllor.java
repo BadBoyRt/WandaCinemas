@@ -12,11 +12,12 @@ import com.thtf.cinemas.domain.User;
 import com.thtf.cinemas.service.UserService;
 
 @Controller
+@RequestMapping(value="/user")
 public class UserControllor {
 	@Autowired
 	UserService userService;
 	
-	@RequestMapping(value = "/users")
+	@RequestMapping(value = "/list")
 	public String selectAllUsers(HttpServletRequest request) {
 		List<User> list = userService.selectAllUsers();
 		request.setAttribute("list", list);

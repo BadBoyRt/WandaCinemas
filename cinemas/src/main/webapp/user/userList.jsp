@@ -9,5 +9,12 @@
 </head>
 <body>
 <%List<User> list = (List<User>)request.getAttribute("list"); %>
+
+<table>
+	<tr>
+		<td><%=list.get(0).getUsername()%></td>
+		<td><%=list.get(0).getPassword()%></td>
+	</tr>
+</table>
 </body>
 </html>
