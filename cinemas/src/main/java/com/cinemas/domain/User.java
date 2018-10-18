@@ -1,4 +1,5 @@
-package com.thtf.cinemas.domain;
+package com.cinemas.domain;
+
 
 public class User {
 

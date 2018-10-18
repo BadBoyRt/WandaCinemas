@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.thtf.cinemas.dao.UserDao">
-	<resultMap id="BaseResultMap" type="com.thtf.cinemas.domain.User">
+<mapper namespace="com.cinemas.dao.UserDao">
+	<resultMap id="BaseResultMap" type="com.cinemas.domain.User">
 		<id column="id" jdbcType="BIGINT" property="id"/>
 		<result column="username" jdbcType="VARCHAR" property="username"/>
 		<result column="password" jdbcType="VARCHAR" property="password"/>
@@ -9,4 +9,8 @@
 	<select id="selectAllUser" resultMap="BaseResultMap">
 		select * from user
 	</select>
+	
+	<select id="getUserById" resultMap="BaseResultMap">
+		select * from user where id = #{userId}
+	</select> 
 </mapper>
