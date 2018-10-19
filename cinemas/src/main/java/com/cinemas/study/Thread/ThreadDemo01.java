@@ -21,6 +21,7 @@ class Ticket
 		{
 			System.out.println(Thread.currentThread().getName()+"\t卖出第："+(number--)+"还剩下"+number+"张");
 			//现在有一个问题，不加同步或者锁进行限定的货，会出现很多重复票。
+			
 		}
 	}
 
