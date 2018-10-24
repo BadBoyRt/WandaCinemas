@@ -1,5 +1,8 @@
 package com.cinemas.study.Thread;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 //资源类（线程- 操作 - 资源类）
 class Ticket
 {
@@ -13,15 +16,24 @@ class Ticket
 	 */
 	
 	private int number = 40;//对票数进行操作，必须加getset方法
+	private Lock lock = new ReentrantLock();
 	
-	//以前的方法，要加同步方法和同步代码块。
+	//以前的方法，要加同步方法和同步代码块。jdk1.5以后出现可重复锁ReentrantLock（也能锁、也能控制）
 	public /*synchronized*/ void sale()
 	{
-		if(number > 0)
+		
+		lock.lock();
+		try 
 		{
-			System.out.println(Thread.currentThread().getName()+"\t卖出第："+(number--)+"还剩下"+number+"张");
-			//现在有一个问题，不加同步或者锁进行限定的货，会出现很多重复票。
-			
+			if(number > 0)
+			{
+				System.out.println(Thread.currentThread().getName()+"\t卖出第："+(number--)+"还剩下"+number+"张");
+				//现在有一个问题，不加同步或者锁进行限定的货，会出现很多重复票。
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			lock.unlock();
 		}
 	}
 
@@ -49,7 +61,66 @@ public class ThreadDemo01
 {
 	public static void main(String[] args)
 	{
+		final Ticket ticket = new Ticket();
 		
+		//使用匿名内部类或者jdk1.8的lambda表达式
+		//Thread的构造方法：Thread(Runnable target, String name) 
+		
+		/***********************多线程编程模板Start**************************/
+		/*new Thread(new Runnable() {//匿名内部类
+			
+			@Override
+			public void run() {
+				
+			}
+		}, "name").start();*/
+		/***********************多线程编程模板End**************************/
+		
+		//多线程操作资源类
+		//1.使用匿名内部类。
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				for (int i = 0; i < 50; i++) {
+					ticket.sale();
+				}
+			}
+		}, "bb").start();
+		
+		//2.使用jdk1.8的lambda表达式
+		new Thread(() -> {
+			for (int i = 0; i < 50; i++) {
+				ticket.sale();
+			}
+		}, "lambda").start();
+		
+		
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for (int i = 0; i < 50; i++) {
+					ticket.sale();
+				}
+			}
+		}, "cc").start();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for (int i = 0; i < 50; i++) {
+					ticket.sale();
+				}
+			}
+		}, "dd").start();
+		
+		//到底调用哪个线程，需要线程调度
+		
+		/**
+		 * synchronized是java中的关键字，而lock，ReentrantLock是具体的类
+		 * 
+		 * 但是synchronized不能做到有序分配，ReentrantLock可重复锁是可以控制的。
+		 * 
+		 */
 	}
 
 }
