@@ -20,6 +20,9 @@ import com.cinemas.domain.Apple;
 public class Java8_Lambda {
 	
 	/**
+	 * 
+	 * 有时间吧这篇整理成文章，即从行为参数化~lambda,把这个思想用自己的话表达出来.
+	 * 
 	 * java8中常用函数式接口：
 	 * java.util.function.~
 	 * 
