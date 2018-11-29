@@ -15,7 +15,7 @@ class Ticket
 	 * 比如说：现在有一个学生类，有name、age等属性，通常我们都要生成get、set方法。即对外暴露了get、set方法，让其他类调用。
 	 */
 	
-	private int number = 40;//对票数进行操作，必须加getset方法
+	private int number = 40;
 	private Lock lock = new ReentrantLock();
 	
 	//以前的方法，要加同步方法和同步代码块。jdk1.5以后出现可重复锁ReentrantLock（也能锁、也能控制）
@@ -36,14 +36,6 @@ class Ticket
 			lock.unlock();
 		}
 	}
-
-	/*public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int number) {
-		this.number = number;
-	}*/
 }
 
 /**
@@ -86,7 +78,7 @@ public class ThreadDemo01
 					ticket.sale();
 				}
 			}
-		}, "bb").start();
+		}, "A").start();
 		
 		//2.使用jdk1.8的lambda表达式
 		new Thread(() -> {
@@ -103,7 +95,7 @@ public class ThreadDemo01
 					ticket.sale();
 				}
 			}
-		}, "cc").start();
+		}, "B").start();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -111,14 +103,15 @@ public class ThreadDemo01
 					ticket.sale();
 				}
 			}
-		}, "dd").start();
+		}, "C").start();
 		
 		//到底调用哪个线程，需要线程调度
 		
 		/**
+		 * 
 		 * synchronized是java中的关键字，而lock，ReentrantLock是具体的类
 		 * 
-		 * 但是synchronized不能做到有序分配，ReentrantLock可重复锁是可以控制的。
+		 * 但是synchronized不能做到有序分配，ReentrantLock可重复锁是可以控制线程调度顺序的.
 		 * 
 		 */
 	}

@@ -11,6 +11,10 @@ public class Transaction {
 		this.year = year;
 		this.value = value;
 	}
+	//此处说final修饰的变量，必须要初始化
+	/*public Transaction() {
+		// TODO Auto-generated constructor stub
+	}*/
 	public Trader getTrader(){
 		return this.trader;
 	}

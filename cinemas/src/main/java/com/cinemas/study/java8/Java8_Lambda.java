@@ -68,6 +68,10 @@ public class Java8_Lambda {
 		redList.add(apple2);
 		redList.add(apple3);
 		
+		Predicate<Apple> testPredicate = (Apple apple) -> apple.getHeight()<30;
+		boolean test = testPredicate.test(apple2);
+		
+		
 		//筛选苹果
 		List<Apple> redApples = filter(redList, (Apple apple) -> "red".equals(apple.getColor()) && 50 < apple.getHeight());
 		//获取苹果的重量
@@ -89,6 +93,7 @@ public class Java8_Lambda {
 		//装箱
 		Predicate<Integer> oddNumbers = (Integer i) -> i % 2 == 1;
 		
+		
 		/*任何函数式接口都不允许抛出受检异常（checked exception）。
 		 * 如果你需要Lambda表达式来抛出异常，有两种办法：定义一个自己的函数式接口，并声明受检异常，
 		 * 或者把Lambda包在一个try/catch块中*/
@@ -100,6 +105,16 @@ public class Java8_Lambda {
 				throw new RuntimeException(e);
 			}
 		};
+		
+		
+		
+		/**
+		 * 方法引用主要有三类:
+		 * 1.指向静态方法的方法引用Integer.parseInt
+		 * 2.指向任意类型实例方法的方法引用String.length
+		 * 3.指向现有对象的实例方法的方法引用Apple.getColor
+		 * 
+		 */
 		
 		//方法引用
 		List<String> list = Arrays.asList("a","b","A","B");
@@ -123,8 +138,14 @@ public class Java8_Lambda {
 		Apple a4 = c3_lambda.apply("green", 110);
 		System.out.println(a4);
 		
+		Integer.parseInt("1");
+		
 		//根据重量对苹果进行排序
 		redList.sort(Comparator.comparing((a) -> a.getHeight()));//lambda
+		redList.sort(Comparator.comparing(Apple::getHeight));//方法引用
+		
+		
+		
 		/**
 		 * 复合lambda表达式
 		 * 
@@ -154,6 +175,7 @@ public class Java8_Lambda {
 		Function<Integer, Integer> z = x -> x + 1;
 		Function<Integer, Integer> g = x -> x * 2;
 		Function<Integer, Integer> h = z.andThen(g);
+		int result = h.apply(1);
 		
 	}
 	
