@@ -7,7 +7,6 @@ import java.util.IntSummaryStatistics;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
@@ -127,8 +126,8 @@ public class Java8_Stream {
 		
 		/**
 		 * 流使用三部曲：1.一个数据源（如集合）来执行一个查询
-		 * 				2.一个中间操作链，形成一条流的流水线
-		 * 					3.一个终端操作，执行流水线，并能生成结果
+		 * 			2.一个中间操作链，形成一条流的流水线
+		 * 			3.一个终端操作，执行流水线，并能生成结果
 		 */
 		
 		//筛选：filter，distinct

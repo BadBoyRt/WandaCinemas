@@ -72,6 +72,7 @@ public class Java8_Lambda {
 		boolean test = testPredicate.test(apple2);
 		
 		
+		
 		//筛选苹果
 		List<Apple> redApples = filter(redList, (Apple apple) -> "red".equals(apple.getColor()) && 50 < apple.getHeight());
 		//获取苹果的重量
